@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools", "wheel", "hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sentences"
+classifiers = ["Private :: Do Not Upload"]
+version = "0"
+requires-python = ">=3.9"
+dependencies = [
+    "bs4",
+    "wikiextractor",
+    "fasttext",
+    "pyyaml",
+    "requests",
+]
