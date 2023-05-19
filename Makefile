@@ -1,8 +1,8 @@
 #!/usr/bin/make -f
 SHELL:=/bin/bash
 .ONESHELL: # Applies to every targets in the file!
-
-codes := $(shell cat wikis.txt)
+# dumps uses _ instead of - in language codes
+codes := $(shell sed 's/-/_/g' wikis.txt)
 dataset=$(codes:%=data/%.sentences.txt)
 
 all: $(dataset)
