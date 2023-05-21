@@ -45,23 +45,19 @@ ld.model.bin: labels.txt
 		-maxn 4 \
 		-loss hs
 
-ld.model.ftz: train.txt valid.txt
+ld.model.ftz: ld.model.bin
 	fasttext quantize \
 		-input train.txt \
-		-output $@ \
-		-epoch 25 \
-		-lr 0.1 \
-		-dim 16 \
-		-minn 2 \
-		-maxn 4 \
+		-output ld.model \
 		-qnorm \
 		-cutoff 50000 \
-		-retrain \
-		-loss hs
+		-retrain
 
-test: ld.model.bin
+
+test: ld.model.bin ld.model.ftz
 	# Test model
 	fasttext test ld.model.bin valid.txt
+	fasttext test ld.model.ftz valid.txt
 
 clean:
 	@rm -rf data dumps

@@ -5,11 +5,11 @@ for file in "$@"; do
   num_lines=$(wc -l "$file" | awk '{print $1}')
   prefix=$(basename "$file" .sentences.txt)
   if [ $num_lines -le $samplesize ]; then
-    while read -r line; do
+    cat "$file" | sed -e "s/\([.\!?,'/()]\)/ \1 /g" | tr "[:upper:]" "[:lower:]" | while read -r line; do
         echo -e "__label__${prefix}\t$line"
-    done < "$file"
+    done
   else
-    shuf -n $samplesize "$file" | while read -r line; do
+    shuf -n $samplesize "$file" | sed -e "s/\([.\!?,'/()]\)/ \1 /g" | tr "[:upper:]" "[:lower:]" | while read -r line; do
       echo -e "__label__${prefix}\t$line"
     done
   fi
