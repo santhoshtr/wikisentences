@@ -10,7 +10,6 @@ requires-python = ">=3.9"
 dependencies = [
     "bs4",
     "wikiextractor",
-    "fasttext",
     "pyyaml",
     "requests",
 ]

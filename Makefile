@@ -29,5 +29,40 @@ data/%.sentences.txt: data/%
 	done;
 	@rm -rf data/$*
 
+labels.txt:
+	./prepare_train_set.sh ./data/*.sentences.txt > $@
+	@echo "Preparing train and testing splits"
+	awk '{if(rand()<0.9) {print > "train.txt"} else {print > "valid.txt"}}' $@
+
+ld.model.bin: labels.txt
+	fasttext supervised \
+		-input train.txt \
+		-output ld.model \
+		-epoch 25 \
+		-lr 0.1 \
+		-dim 16 \
+		-minn 2 \
+		-maxn 4 \
+		-loss hs
+
+ld.model.ftz: train.txt valid.txt
+	fasttext quantize \
+		-input train.txt \
+		-output $@ \
+		-epoch 25 \
+		-lr 0.1 \
+		-dim 16 \
+		-minn 2 \
+		-maxn 4 \
+		-qnorm \
+		-cutoff 50000 \
+		-retrain \
+		-loss hs
+
+test: ld.model.bin
+	# Test model
+	fasttext test ld.model.bin valid.txt
+
 clean:
 	@rm -rf data dumps
+
