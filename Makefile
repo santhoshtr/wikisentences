@@ -29,7 +29,13 @@ data/%.sentences.txt: data/%
 	done;
 	@rm -rf data/$*
 
-labels.txt:
+datacleanup:
+	# General cleanup
+	sed -i -E -f cleanup.sed ./data/*.sentences.txt
+	# Remove English from non lating scripts
+	./remove_english.sh
+
+labels.txt: datacleanup
 	./prepare_train_set.sh ./data/*.sentences.txt > $@
 	@echo "Preparing train and testing splits"
 	awk '{if(rand()<0.9) {print > "train.txt"} else {print > "valid.txt"}}' $@
@@ -56,8 +62,8 @@ ld.model.ftz: ld.model.bin
 
 test: ld.model.bin ld.model.ftz
 	# Test model
-	fasttext test ld.model.bin valid.txt
-	fasttext test ld.model.ftz valid.txt
+	fasttext test-label ld.model.bin valid.txt
+	fasttext test-label ld.model.ftz valid.txt
 
 clean:
 	@rm -rf data dumps

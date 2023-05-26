@@ -34,7 +34,11 @@ def get_wiki_sites(project: str = "wiki") -> List[str]:
                 int(lang)  # weirdly, wikis are keyed as numbers in the results
                 for wiki in result["sitematrix"][lang].get("site", []):
                     if "closed" not in wiki and wiki["code"] == project:
-                        wiki_languages.add(result["sitematrix"][lang]["code"])
+                        code = result["sitematrix"][lang]["code"]
+                        if code == 'simple':
+                            # Simple is English language
+                            continue
+                        wiki_languages.add(code)
                         break
             except ValueError:  # skip count metadata and special wikis like Commons, Affiliates, etc.
                 continue
