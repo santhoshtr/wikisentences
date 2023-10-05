@@ -5,7 +5,7 @@ SHELL:=/bin/bash
 codes := $(shell sed 's/-/_/g' wikis.txt)
 dataset=$(codes:%=data/%.sentences.txt)
 
-all: $(dataset)
+all: $(dataset) datacleanup test
 
 dumps/%wiki-latest-pages-articles.xml:
 	mkdir -p dumps
@@ -25,20 +25,20 @@ data/%: dumps/%wiki-latest-pages-articles.xml
 data/%.sentences.txt: data/%
 	find data/$*  -name 'wiki_*' -type f -print0 | while read -d '' -r file; do \
 		echo "Sentence segmenting $$file"; \
-		awk NF "$$file" | sed '/^<doc/d; /^<\/doc/d' | python segmenter.py >> $@; \
+		awk NF "$$file" | sed '/^<doc/d; /^<\/doc/d' | python segmenter.py $* >> $@; \
 	done;
 	@rm -rf data/$*
 
 datacleanup:
 	# General cleanup
 	sed -i -E -f cleanup.sed ./data/*.sentences.txt
-	# Remove English from non lating scripts
+	# Remove English from non latin scripts
 	./remove_english.sh
 
-labels.txt: datacleanup
+labels.txt:
 	./prepare_train_set.sh ./data/*.sentences.txt > $@
-	@echo "Preparing train and testing splits"
-	awk '{if(rand()<0.9) {print > "train.txt"} else {print > "valid.txt"}}' $@
+	@echo "Preparing train and testing splits. 90:10 split."
+	awk '{if(NR%10==0) {print > "valid.txt"} else {print > "train.txt"}}' $@
 
 ld.model.bin: labels.txt
 	fasttext supervised \
@@ -55,9 +55,12 @@ ld.model.ftz: ld.model.bin
 	fasttext quantize \
 		-input train.txt \
 		-output ld.model \
-		-qnorm \
-		-cutoff 50000 \
-		-retrain
+		-epoch 25 \
+		-lr 0.1 \
+		-dim 16 \
+		-minn 2 \
+		-maxn 4 \
+		-loss hs
 
 
 test: ld.model.bin ld.model.ftz

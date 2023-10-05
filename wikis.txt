@@ -2,8 +2,6 @@ ab
 ace
 ady
 af
-ak
-als
 alt
 am
 ami
@@ -26,10 +24,9 @@ azb
 ba
 ban
 bar
-bat-smg
 bcl
 be
-be-x-old
+be-tarask
 bg
 bh
 bi
@@ -79,11 +76,12 @@ et
 eu
 ext
 fa
+fat
 ff
 fi
-fiu-vro
 fj
 fo
+fon
 fr
 frp
 frr
@@ -100,6 +98,8 @@ gn
 gom
 gor
 got
+gpe
+gsw
 gu
 guc
 gur
@@ -169,6 +169,7 @@ lo
 lt
 ltg
 lv
+lzh
 mad
 mai
 map-bms
@@ -190,8 +191,8 @@ mwl
 my
 myv
 mzn
-na
 nah
+nan
 nap
 nds
 nds-nl
@@ -234,10 +235,10 @@ rm
 rmy
 rn
 ro
-roa-rup
 roa-tara
 ru
 rue
+rup
 rw
 sa
 sah
@@ -248,11 +249,11 @@ sco
 sd
 se
 sg
+sgs
 sh
 shi
 shn
 si
-simple
 sk
 skr
 sl
@@ -281,6 +282,7 @@ th
 ti
 tk
 tl
+tly
 tn
 to
 tpi
@@ -303,6 +305,7 @@ vep
 vi
 vls
 vo
+vro
 wa
 war
 wo
@@ -312,10 +315,8 @@ xh
 xmf
 yi
 yo
+yue
 za
 zea
 zh
-zh-classical
-zh-min-nan
-zh-yue
 zu

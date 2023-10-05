@@ -12,4 +12,5 @@ dependencies = [
     "wikiextractor",
     "pyyaml",
     "requests",
+    "sentencex",
 ]
