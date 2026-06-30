@@ -9,7 +9,6 @@ ENTERPRISE_DUMP_SUFFIX := -NS0-20250320-ENTERPRISE-HTML.json.tar.gz
 enterprise_codes := $(shell sed 's/-/_/g' $(DATA_DIR)/wikipedia.list)
 html_parquet := $(enterprise_codes:%=data/%.html.parquet)
 
-EXTRACTOR := wiki-html-text-extractor/target/release/wiki-html-text-extractor
 text_parquet := $(enterprise_codes:%=data/%.text.parquet)
 sentences_parquet := $(enterprise_codes:%=data/%.sentences.parquet)
 
@@ -41,13 +40,9 @@ data/%.html.parquet: dumps/enterprise_html/%-wiki$(ENTERPRISE_DUMP_SUFFIX)
 clean:
 	@rm -rf data dumps
 
-# Build the Rust extractor binary
-$(EXTRACTOR):
-	cargo build --release --manifest-path wiki-html-text-extractor/Cargo.toml
-
-# Extract plain text from HTML parquet (depends on html parquet + binary)
-data/%.text.parquet: data/%.html.parquet $(EXTRACTOR)
-	uv run scripts/html_to_text_parquet.py $< $@ $(EXTRACTOR)
+# Extract plain text from HTML parquet
+data/%.text.parquet: data/%.html.parquet
+	uv run scripts/html_to_text_parquet.py $< $@
 
 # Segment text into sentences (language code extracted from filename)
 data/%.sentences.parquet: data/%.text.parquet

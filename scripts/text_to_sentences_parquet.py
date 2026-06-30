@@ -2,7 +2,7 @@
 # requires-python = ">=3.9"
 # dependencies = [
 #   "pyarrow>=15.0.0",
-#   "sentencex>=1.0.0",
+#   "sentencex>=1.0.30",
 #   "tqdm>=4.0.0",
 # ]
 # ///
